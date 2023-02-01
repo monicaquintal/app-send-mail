@@ -6,7 +6,7 @@
 ---
 
 <div id="aula01" align= "justify">
-<h2 align="center">Objetivo 🎯</h2>
+<h2>Objetivo 🎯</h2>
 
 Estudo do conteúdo abordado na [Seção 12: PHP e Orientação a Objetos](https://github.com/monicaquintal/estudandoPHP-orientacao-a-objetos):
 
@@ -15,13 +15,13 @@ Estudo do conteúdo abordado na [Seção 12: PHP e Orientação a Objetos](https
 - Incorporar biblioteca phpmailer;
 - Segurança do lado do back-end da aplicação, protegendo arquivos sigilosos.
 
-<h2 align="center">O projeto 💭</h2>
+<h2>O projeto 💭</h2>
 
 Aplicação funcional, capaz de enviar e-mails através do serviço de SMTP do Gmail (muito utilizado em sites comerciais).
 
 No front-end da aplicação, um formulário, onde serão inseridos email, assunto e mensagem. O back-end fará o processamento necessário para disparar a mensagem de sucesso (caso o usuário seja válido).
 
-<h2 align="center">Aulas 📚</h2>
+<h2>Aulas 📚</h2>
 
 <a href="#aula01">Aula 01: Introdução.</a><br>
 <a href="#aula02">Aula 02: Iniciando o projeto.</a><br>
@@ -32,11 +32,19 @@ No front-end da aplicação, um formulário, onde serão inseridos email, assunt
 </div>
 
 <div id="aula02">
-<h3>Iniciando o projeto</h3>
+<h3>Aula 02: Iniciando o projeto</h3>
 </div>
 
 Iniciando o projeto: criação do diretório app-send-mail, incluindo arquivo `index.php` e imagem `logo.png`.
 
 <div id="aula03">
-<h3>Enviando dados do front-end para o back-end via método Post</h3>
+<h3>Aula 03: Enviando dados do front-end para o back-end via método Post</h3>
+</div>
+
+- definindo o método de envio do formulário (`post`) e o arquivo de destino (`processa_envio.php`).
+
+- atribuindo names para os campos, para posteriormente explorá-lo individualmente.
+
+<div id="aula04">
+<h3>Aula 04: Criando e instanciando a Classe Mensagem</h3>
 </div>
