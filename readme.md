@@ -27,9 +27,9 @@ No front-end da aplicação, um formulário, onde serão inseridos email, assunt
 <a href="#aula02">Aula 02: Iniciando o projeto.</a><br>
 <a href="#aula03">Aula 03: Enviando dados do front-end para o back-end via método Post.</a><br>
 <a href="#aula04">Aula 04: Criando e instanciando a Classe Mensagem.</a><br>
-<a href="#aula05">Aula 05: Adicionando a biblioteca PHPMailer ao projeto</a><br>
-<a href="#aula06">Aula 06: Configurando o PHPMailer e envindo e-mails</a><br>
-
+<a href="#aula05">Aula 05: Adicionando a biblioteca PHPMailer ao projeto.</a><br>
+<a href="#aula06">Aula 06: Configurando o PHPMailer e envindo e-mails.</a><br>
+<a href="#aula07">Aula 07: Enviando e-mails com base nos parâmetros do front-end.</a><br>
 
 
 </div>
@@ -229,4 +229,102 @@ try {
 
 <div id="aula06">
 <h3>Aula 06: Configurando o PHPMailer e envindo e-mails.</h3>
+</div>
+
+`Servidor SMTP` tem o funcionamento parecido com os Correios: despachamos uma determinada correspondência, e ele é responsável por receber essa correspondência e organizar a sua entrega.
+
+Há diversos servidores SMTP disponíveis de fotma gratuita, como o próprio Gmail do Google.
+
+
+### Entendendo a interação entre as partes da aplicação:
+
+O front-end se comunica com o back-end através do protocolo HTTP, enquanto a aplicação implementa uma biblioteca que vai utilizar um serviço disponível na Internet.
+Então, através da Internet, utilizando o protocolo SMTP, é feita uma autenticação no Gmail para, a partir da nossa aplicação, disparar um e-mail, sendo o Gmail o responsável por fazer essa entrega ao destinatário!
+
+### Implementando na prática:
+
+1. Criar uma conta no Gmail.
+
+2. Inserir login e senha do e-mail no script `processa_envio.php`.
+
+~~~php
+$mail = new PHPMailer(true);
+try {
+  <...>                                
+  $mail->Username   = 'seu.email@gmail.com';                   
+  $mail->Password   = 'senha';    
+  <...>             
+} catch {
+  <...>
+}      
+~~~
+
+3. Informar o Host (servidor SMTP) que utilizaremos como gateway.
+
+- acessar o artigo ["Enviar e-mails usando uma impressora, um scanner ou um app"](https://support.google.com/a/answer/176600?hl=pt);
+  
+- inserir o DNS (endereço): smtp-relay.gmail.com (conforme acesso em 01/02/2023).
+
+~~~php
+$mail->Host = 'smtp-relay.gmail.com';  
+~~~
+
+- configurações de segurança (criptografia em tls) e porta (587).
+
+- ajustando remetente e destinatários.
+
+~~~php
+//Recipients
+$mail->setFrom('monica.zoom@gmail.com', 'Mônica Remetente');
+$mail->addAddress('monica.zoom@gmail.com', 'Mônica Destinatário');     //Add a recipient
+// $mail->addReplyTo('info@example.com', 'Information'); // encaminha sempre as respostas a esse destinatário
+// $mail->addCC('cc@example.com'); // com cópia
+// $mail->addBCC('bcc@example.com'); // cópia oculta
+~~~
+
+- alterando demais parâmetros (de anexos, mensagem, etc).
+
+~~~php
+try {
+  <...>
+  //Attachments (anexos)
+  // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+  // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+  
+  //Content
+  $mail->isHTML(true);                                  //Set email format to HTML
+  $mail->Subject = 'Oi, eu sou o assunto!';
+  $mail->Body    = 'Oi, eu sou o conteúdo do <strong>e-mail</strong>!';
+  $mail->AltBody = 'Oi, eu sou o conteúdo do e-mail!';
+  $mail->send();
+  echo 'Message has been sent';
+} catch (Exception $e) {
+  echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+~~~
+
+4. Relizando um teste!
+
+Neste caso, ocorrerá uma mensagem se erro, pois geralmente servidores SMTP são fechados para aplicações externas.
+
+Portanto, é necessário autorizar previamente que apps externos ao domínio tenham acesso a realizar autenticação com aqueles usuários.
+
+### IMPORTANTE:
+
+Atualmente, a opção de "apps menos seguros" não está mais autorizada pelo Google! Agora precisamos gerar uma senha exclusiva para este fim.
+
+Para configurar uma senha exclusiva para o projeto, acesse a conta de e-mail do Gmail que será utilizada em seu projeto e siga os passos:
+
+1. Clique na opção "Gerenciar sua Conta do Google";
+2. Clique na opção "Segurança";
+3. Ative a opção de "Verificação em duas etapas";
+4. Clique na opção "Senhas de app";
+5. Clique na opção "Selecione o app e o dispositivo para o qual você quer gerar a senha de app" e escolha a opção "Outro";
+6. Defina um nome (pode ser qualquer nome) e depois clique em "gerar";
+7.  A senha será gerada, basta copiá-la;
+8. Utilize a senha copiada no passo 7 no arquivo de configuração de envio de e-mail (processa_envio.php);
+9. Após realizar estes passos o envio de e-mails deve funcionar normalmente.
+
+<div id="aula07">
+<h3>Aula 07: Enviando e-mails com base nos parâmetros do front-end.</h3>
 </div>
