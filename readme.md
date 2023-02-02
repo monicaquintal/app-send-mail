@@ -31,7 +31,7 @@ No front-end da aplicação, um formulário, onde serão inseridos email, assunt
 <a href="#aula06">Aula 06: Configurando o PHPMailer e envindo e-mails.</a><br>
 <a href="#aula07">Aula 07: Enviando e-mails com base nos parâmetros do front-end.</a><br>
 <a href="#aula08">Aula 08: Melhorando o feedback visual.</a><br>
-
+<a href="#aula09">Aula 09: De olho na segurança do back-end</a><br>
 
 </div>
 
@@ -238,6 +238,8 @@ try {
 }
 ~~~
 
+<hr>
+
 <div id="aula06">
 <h3>Aula 06: Configurando o PHPMailer e envindo e-mails.</h3>
 </div>
@@ -383,4 +385,105 @@ try {
 
 <div id="aula08">
 <h3>Aula 08: Melhorando o feedback visual.</h3>
+</div>
+
+1. Impedindo o usuário de acessar o script `provessa_envio.php` sem que passe pelo arquivo `index.php`.
+
+- já tratado no if/else (com "die()");
+- ao invés de "matar" a aplicação, redirecionar para index.php.
+
+~~~php
+if(!$mensagem->mensagemValida()) {
+  echo "Mensagem inválida!";
+  header('Location: ./index.php');
+} 
+~~~
+
+2. Criando atributo para exibição de erros:
+
+~~~php
+class Mensagem {
+<...>
+  private $mensagem = null;
+  public $status = array('codigo_status' => null, 'descricao_status' => '');
+<...>
+}
+
+try {
+  <...>
+} catch {
+  <...>
+  $mensagem->status['codigo_status'] = 1;
+  $mensagem->status['descricao_status'] = 'E-mail enviado com sucesso!';
+} catch (Exception $e) {
+  $mensagem->status['codigo_status'] = 2;
+  $mensagem->status['descricao_status'] = 'Não foi possível enviar este e-mail. Por favor, tente novamente mais tarde!' . $mail->ErrorInfo;
+}
+~~~
+
+3. Configurando uma página HTML de retorno, no arquivo `processa_envio.php`.
+
+~~~php
+<html>
+<head>
+  <meta charset="utf-8" />
+    <title>App Send Mail</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="py-3 text-center">
+      <img class="d-block mx-auto mb-2" src="./assets/logo.png" alt="" width="72" height="72">
+      <h2>Send Mail</h2>
+        <p class="lead">Seu app de envio de e-mails particular!</p>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <?php
+
+        if ($mensagem->status['codigo_status'] == 1) {
+        ?>  
+
+          <div class="container">
+            <h1 class="display-4 text-success">Sucesso!</h1>
+            <p><?= $mensagem->status['descricao_status']?></p>
+            <a href="./index.php" class="btn btn-success btn-lg mt-5 text-white">Voltar</a> 
+          </div>
+
+        <?php  
+        } 
+        ?>
+
+        <!-- fluxo de erro -->
+        <?php
+
+        if ($mensagem->status['codigo_status'] == 2) {
+        ?>  
+
+          <div class="container">
+            <h1 class="display-4 text-danger">Ops!</h1>
+            <p><?= $mensagem->status['descricao_status']?></p>
+            <a href="./index.php" class="btn btn-danger btn-lg mt-5 text-white">Voltar</a> 
+          </div>
+
+        <?php  
+        } 
+        ?>
+~~~
+
+4. Ocultando relatório debug: definir atributo "false".
+
+~~~php
+$mail->SMTPDebug = false;
+~~~
+
+<hr>
+
+<div id="aula09">
+<h3>Aula 09: De olho na segurança do back-end.</h3>
 </div>
