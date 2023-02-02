@@ -1,2 +1,0 @@
-$mail->Username = 'teste.teste@gmail.com';
-$mail->Password   = 'teste'; 
