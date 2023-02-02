@@ -64,8 +64,8 @@ try {
     $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
     //Recipients
-    $mail->setFrom('seu.email@gmail.com', 'Monica Remetente');
-    $mail->addAddress('seu.email@gmail.com', 'Monica Destinatario');     //Add a recipient
+    $mail->setFrom('seu.email@gmail.com', 'Monica');
+    $mail->addAddress($mensagem->__get('para'));     //Add a recipient
     // $mail->addReplyTo('info@example.com', 'Information'); // encaminha sempre as respostas a esse destinatário
     // $mail->addCC('cc@example.com'); // com cópia
     // $mail->addBCC('bcc@example.com'); // cópia oculta
@@ -76,11 +76,11 @@ try {
     
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = 'Oi, eu sou o assunto!';
-    $mail->Body    = 'Oi, eu sou o conteúdo do <strong>e-mail</strong>!';
-    $mail->AltBody = 'Oi, eu sou o conteúdo do e-mail!';
+    $mail->Subject = $mensagem->__get('assunto');
+    $mail->Body    = $mensagem->__get('mensagem');
+    $mail->AltBody = "É necessário utilizar um client que suporte HTML para ter acesso total ao conteúdo desta mensagem!";
     $mail->send();
-    echo 'Message has been sent';
+    echo 'E-mail enviado com sucesso!';
 } catch (Exception $e) {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }

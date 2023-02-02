@@ -30,9 +30,12 @@ No front-end da aplicação, um formulário, onde serão inseridos email, assunt
 <a href="#aula05">Aula 05: Adicionando a biblioteca PHPMailer ao projeto.</a><br>
 <a href="#aula06">Aula 06: Configurando o PHPMailer e envindo e-mails.</a><br>
 <a href="#aula07">Aula 07: Enviando e-mails com base nos parâmetros do front-end.</a><br>
+<a href="#aula08">Aula 08: Melhorando o feedback visual.</a><br>
 
 
 </div>
+
+<hr>
 
 <div>
 <h3>Aula 01: Introdução</h3>
@@ -40,11 +43,15 @@ No front-end da aplicação, um formulário, onde serão inseridos email, assunt
 
 Apresentação do projeto e seus objetivos.
 
+<hr>
+
 <div id="aula02">
 <h3>Aula 02: Iniciando o projeto</h3>
 </div>
 
 Iniciando o projeto: criação do diretório app-send-mail, incluindo arquivo `index.php` e imagem `logo.png`.
+
+<hr>
 
 <div id="aula03">
 <h3>Aula 03: Enviando dados do front-end para o back-end via método Post</h3>
@@ -53,6 +60,8 @@ Iniciando o projeto: criação do diretório app-send-mail, incluindo arquivo `i
 - definindo o método de envio do formulário (`post`) e o arquivo de destino (`processa_envio.php` - back-end da aplicação).
 
 - atribuindo names para os campos, para posteriormente explorá-lo individualmente.
+
+<hr>
 
 <div id="aula04">
 <h3>Aula 04: Criando e instanciando a Classe Mensagem</h3>
@@ -156,6 +165,8 @@ if($mensagem->mensagemValida()) { // true
 }
 ~~~
 
+<hr>
+
 <div id="aula05">
 <h3>Aula 05: Adicionando a biblioteca PHPMailer ao projeto</h3>
 </div>
@@ -235,7 +246,6 @@ try {
 
 Há diversos servidores SMTP disponíveis de fotma gratuita, como o próprio Gmail do Google.
 
-
 ### Entendendo a interação entre as partes da aplicação:
 
 O front-end se comunica com o back-end através do protocolo HTTP, enquanto a aplicação implementa uma biblioteca que vai utilizar um serviço disponível na Internet.
@@ -275,8 +285,8 @@ $mail->Host = 'smtp-relay.gmail.com';
 
 ~~~php
 //Recipients
-$mail->setFrom('monica.zoom@gmail.com', 'Mônica Remetente');
-$mail->addAddress('monica.zoom@gmail.com', 'Mônica Destinatário');     //Add a recipient
+$mail->setFrom('seu.email@gmail.com', 'Mônica Remetente');
+$mail->addAddress('seu.email@gmail.com', 'Mônica Destinatário');     //Add a recipient
 // $mail->addReplyTo('info@example.com', 'Information'); // encaminha sempre as respostas a esse destinatário
 // $mail->addCC('cc@example.com'); // com cópia
 // $mail->addBCC('bcc@example.com'); // cópia oculta
@@ -325,6 +335,52 @@ Para configurar uma senha exclusiva para o projeto, acesse a conta de e-mail do 
 8. Utilize a senha copiada no passo 7 no arquivo de configuração de envio de e-mail (processa_envio.php);
 9. Após realizar estes passos o envio de e-mails deve funcionar normalmente.
 
+<hr>
+
 <div id="aula07">
 <h3>Aula 07: Enviando e-mails com base nos parâmetros do front-end.</h3>
+</div>
+
+Inserindo atributos recuperados através do método __get():
+
+~~~php
+$mail = new PHPMailer(true);
+try {
+    //Server settings
+    $mail->SMTPDebug = 2;//SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->Username   = 'seu.email@gmail.com';                     //SMTP username
+    $mail->Password   = 'senha';                               //SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            //Enable implicit TLS encryption
+    $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+    //Recipients
+    $mail->setFrom('seu.email@gmail.com', 'Monica');
+    $mail->addAddress($mensagem->__get('para'));     //Add a recipient
+    // $mail->addReplyTo('info@example.com', 'Information'); // encaminha sempre as respostas a esse destinatário
+    // $mail->addCC('cc@example.com'); // com cópia
+    // $mail->addBCC('bcc@example.com'); // cópia oculta
+
+    //Attachments (anexos)
+    // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+    // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+    
+    //Content
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = $mensagem->__get('assunto');
+    $mail->Body    = $mensagem->__get('mensagem');
+    $mail->AltBody = "É necessário utilizar um client que suporte HTML para ter acesso total ao conteúdo desta mensagem!";
+    $mail->send();
+    echo 'E-mail enviado com sucesso!';
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+~~~
+
+<hr>
+
+<div id="aula08">
+<h3>Aula 08: Melhorando o feedback visual.</h3>
 </div>
