@@ -17,6 +17,12 @@ Estudo do conteúdo abordado na [Seção 12: PHP e Orientação a Objetos](https
 
 <h2>O projeto 💭</h2>
 
+<br>
+<div align="center">
+<img src="./assets/app-send-mail.png" width="70%">
+</div>
+
+
 Aplicação funcional, capaz de enviar e-mails através do serviço de SMTP do Gmail (muito utilizado em sites comerciais).
 
 No front-end da aplicação, um formulário, onde serão inseridos email, assunto e mensagem. O back-end fará o processamento necessário para disparar a mensagem de sucesso (caso o usuário seja válido).
@@ -487,3 +493,7 @@ $mail->SMTPDebug = false;
 <div id="aula09">
 <h3>Aula 09: De olho na segurança do back-end.</h3>
 </div>
+
+1. Retirar do diretório público do Apache tudo que é sigiloso (arquivo `processa_envio.php`)!
+
+2. Acessar a página de processamento através de require.
